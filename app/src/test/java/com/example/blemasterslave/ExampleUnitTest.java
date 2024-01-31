@@ -1,4 +1,4 @@
-package com.example.myapplicationtrial;
+package com.example.blemasterslave;
 
 import org.junit.Test;
 

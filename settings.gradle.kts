@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "My Application trial"
+rootProject.name = "BLEmasterslave"
 include(":app")
