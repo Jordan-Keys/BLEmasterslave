@@ -1,4 +1,4 @@
 package com.example.blemasterslave;
 
-public class Master {
+public class Slave {
 }
