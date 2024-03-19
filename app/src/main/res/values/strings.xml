@@ -1,7 +1,3 @@
 <resources>
     <string name="app_name">BLEmasterslave</string>
-    <!-- Strings used throughout the application -->
-    <string name="StringName1">Value</string>
-    <string name="StringName2">Value</string>
-    <string name="StringName3">Value</string>
 </resources>
