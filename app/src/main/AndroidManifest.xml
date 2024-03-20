@@ -23,7 +23,7 @@
             android:theme="@style/Theme.BLEmasterslave"
             tools:targetApi="31">
         <activity
-                android:name="App.MasterSlave.Gatt_Client"
+                android:name="App.MasterSlave.Permissions"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
