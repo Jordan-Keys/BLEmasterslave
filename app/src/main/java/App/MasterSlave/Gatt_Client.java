@@ -39,6 +39,11 @@ public class Gatt_Client extends AppCompatActivity {
             scanLeDevice(true);
         });
 
+        Button button1 = findViewById(R.id.scanButton1);
+        button1.setOnClickListener(v -> {
+            stopScan();
+        });
+
         // Ensure that the required permissions are granted
         if (hasPermissions()) {
             initializeBluetooth();
@@ -113,6 +118,7 @@ public class Gatt_Client extends AppCompatActivity {
             bluetoothLeScanner.stopScan(scanCallback);
         }
     }
+
     private ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
@@ -139,10 +145,28 @@ public class Gatt_Client extends AppCompatActivity {
         public void onBatchScanResults(List<ScanResult> results) {
             Toast.makeText(Gatt_Client.this, "Multiple testing", Toast.LENGTH_SHORT).show();
         }
+
         @Override
         public void onScanFailed(int errorCode) {
             Toast.makeText(Gatt_Client.this, "failed to scan", Toast.LENGTH_SHORT).show();
         }
+
+
+
     };
+    public void stopScan() {
+        if (scanning) {
+            scanning = false;
+            if (ActivityCompat.checkSelfPermission(Gatt_Client.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                if (!hasPermissions()) {
+                }
+            }
+            bluetoothLeScanner.stopScan(scanCallback);
+            Toast.makeText(Gatt_Client.this, "Scanning stopped", Toast.LENGTH_SHORT).show();
+        } else {
+            // Scanning is not currently active
+            Toast.makeText(Gatt_Client.this, "Scanning is not active", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 
