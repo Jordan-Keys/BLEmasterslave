@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">BLEmasterslave</string>
-    <string name="scan">START SCAN</string>
+    <string name="scan">START SCANNING</string>
+    <string name="stop">STOP SCANNING</string>
+    <string name="advertise">START ADVERTISING</string>
 </resources>
