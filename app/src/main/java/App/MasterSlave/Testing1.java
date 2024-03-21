@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Button;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import com.example.blemasterslave.R;
@@ -21,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gatt_Client extends AppCompatActivity {
+public class Testing1 extends AppCompatActivity {
 
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
@@ -34,15 +33,10 @@ public class Gatt_Client extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = findViewById(R.id.scanButton);
-        button.setOnClickListener(v -> {
-            scanLeDevice(true);
-        });
-
         // Ensure that the required permissions are granted
         if (hasPermissions()) {
             initializeBluetooth();
-//            scanLeDevice(true);
+            scanLeDevice(true);
         } else {
             requestPermissions();
         }
@@ -77,7 +71,7 @@ public class Gatt_Client extends AppCompatActivity {
         if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Permission granted, initialize Bluetooth and start scanning
             initializeBluetooth();
-//            scanLeDevice(true);
+            scanLeDevice(true);
         } else {
             // Permission denied, handle accordingly
             Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
@@ -91,10 +85,10 @@ public class Gatt_Client extends AppCompatActivity {
                 @Override
                 public void run() {
                     scanning = false;
-                    if (ActivityCompat.checkSelfPermission(Gatt_Client.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(Gatt_Client.this, "Location permission is required for Bluetooth scanning.", Toast.LENGTH_SHORT).show();
+                    if (ActivityCompat.checkSelfPermission(Testing1.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(Testing1.this, "Location permission is required for Bluetooth scanning.", Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(Gatt_Client.this, "Location permission is required for Bluetooth scanning.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Testing1.this, "Location permission is required for Bluetooth scanning.", Toast.LENGTH_SHORT).show();
                 }
             }, SCAN_PERIOD);
 
@@ -116,10 +110,10 @@ public class Gatt_Client extends AppCompatActivity {
     private ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            if (ActivityCompat.checkSelfPermission(Gatt_Client.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(Testing1.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 if (!hasPermissions()) {
                     // Handle the case where the permission is not granted
-                    Toast.makeText(Gatt_Client.this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Testing1.this, "Permission denied", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -132,16 +126,16 @@ public class Gatt_Client extends AppCompatActivity {
 
             // Display device name and RSSI using a toast message
             String message = "Device Name: " + deviceName + "\nRSSI: " + rssi;
-            Toast.makeText(Gatt_Client.this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(Testing1.this, message, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
-            Toast.makeText(Gatt_Client.this, "Multiple testing", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Testing1.this, "Multiple testing", Toast.LENGTH_SHORT).show();
         }
         @Override
         public void onScanFailed(int errorCode) {
-            Toast.makeText(Gatt_Client.this, "failed to scan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Testing1.this, "failed to scan", Toast.LENGTH_SHORT).show();
         }
     };
 }

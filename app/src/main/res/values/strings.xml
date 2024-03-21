@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BLEmasterslave</string>
+    <string name="scan">START SCAN</string>
 </resources>
