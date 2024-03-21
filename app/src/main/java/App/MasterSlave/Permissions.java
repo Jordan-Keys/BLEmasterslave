@@ -82,8 +82,7 @@ public class Permissions extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // enable user turn on the location services
                 showLocationSettings();
-                // if location services are turned on
-                Toast.makeText(this, "Starting scanning.", Toast.LENGTH_SHORT).show();
+
                 // if location permission not granted
             } else {
                 // if the user denies location permissions
@@ -106,8 +105,8 @@ public class Permissions extends AppCompatActivity {
                 showLocationSettings();
             } else {
                 // Location services are enabled, start BLE scanning
-//                startBleScanning();
-                Toast.makeText(this, "Starting scanning.", Toast.LENGTH_SHORT).show();
+                Gatt_Client Gatt = new Gatt_Client();
+                Gatt.startBleScanning(this);
             }
         }
     }
