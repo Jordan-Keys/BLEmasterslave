@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.example.blemasterslave.R;
 import org.jetbrains.annotations.NotNull;
+import android.widget.Button;
 import App.MasterSlave.Gatt_Client;
+
 
 public class Permissions extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
@@ -28,6 +30,13 @@ public class Permissions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkBluetoothSupport();
+        Button button = findViewById(R.id.scanButton);
+        button.setOnClickListener(v -> {
+            Toast.makeText(this, "Scan has been started", Toast.LENGTH_SHORT).show();// for testing
+            Testing1 Gatt = new Testing1();
+            Gatt.scanLeDevice(true);
+        });
+
     }
 
     /*=================================>>>>>HANDLING BLUETOOTH PERMISSIONS<<<<<=========================*/
@@ -46,11 +55,8 @@ public class Permissions extends AppCompatActivity {
                     startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
                 }
             } else {
-                // if bluetooth is supported and enabled
-                // check if location permission is granted
-                  checkLocationPermission();// to be uncommented
-//                Gatt_Client gattClient = new Gatt_Client();// for testing
-//                gattClient.startBleScanning(this);
+                // if bluetooth is supported and enabled then check if location permission is granted
+                  checkLocationPermission();
             }
         }
     }
@@ -64,7 +70,6 @@ public class Permissions extends AppCompatActivity {
                 // if user allows Bluetooth
                 // also let him allow location permissions
                 checkLocationPermission();// to be uncommented
-//              startBleScanning();//for testing
             } else {
                 // if user denies Bluetooth
                 Toast.makeText(this, "You denied Bluetooth.", Toast.LENGTH_SHORT).show();
@@ -105,8 +110,9 @@ public class Permissions extends AppCompatActivity {
                 showLocationSettings();
             } else {
                 // Location services are enabled, start BLE scanning
-                Gatt_Client Gatt = new Gatt_Client();
-                Gatt.startBleScanning(this);
+//                Gatt_Client Gatt = new Gatt_Client();
+//                Gatt.startBleScanning(this);
+                Toast.makeText(getApplicationContext(), "Scanning Just Started", Toast.LENGTH_SHORT).show();//testing
             }
         }
     }
