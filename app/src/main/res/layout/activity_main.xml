@@ -6,10 +6,13 @@
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/scanButton"
-            android:text="scan"/>
+            android:text="@string/scan"/>
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/advertiseButton"
-            android:text="Advertise"/>
-    />
+            android:id="@+id/stop"
+            android:text="@string/advertise"/>
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanButton1"
+            android:text="@string/stop"/>
 </LinearLayout>
