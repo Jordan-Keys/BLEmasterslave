@@ -15,4 +15,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/scanButton1"
             android:text="@string/stop"/>
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/closeButton1"
+            android:text="@string/close"/>
 </LinearLayout>

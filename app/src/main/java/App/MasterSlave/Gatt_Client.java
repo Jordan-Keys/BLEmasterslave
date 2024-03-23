@@ -1,39 +1,43 @@
 package App.MasterSlave;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import com.example.blemasterslave.R;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Gatt_Client extends AppCompatActivity {
-
-    private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
+    static BluetoothAdapter bluetoothAdapter;
     private boolean scanning = false;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private static final long SCAN_PERIOD = 10000; // 10 seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Permissions permissions = new Permissions();
+//        permissions.checkBluetoothSupport(this);
         setContentView(R.layout.activity_main);
-
         Button button = findViewById(R.id.scanButton);
         button.setOnClickListener(v -> {
             scanLeDevice(true);
@@ -44,50 +48,64 @@ public class Gatt_Client extends AppCompatActivity {
             stopScan();
         });
 
+        Button button2 = findViewById(R.id.closeButton1);
+        button2.setOnClickListener(v -> {
+            System.exit(0);
+        });
+
         // Ensure that the required permissions are granted
         if (hasPermissions()) {
-            initializeBluetooth();
-//            scanLeDevice(true);
+            initializeBluetooth(this);
         } else {
             requestPermissions();
         }
     }
+    // Results returned from bluetooth decision after requesting permission
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Permissions.handleOnActivityResult(this, requestCode, resultCode);
+//        Permissions.handleOnActivityResult(this, requestCode, resultCode);
 
-    private void initializeBluetooth() {
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
-            // Bluetooth is not available or not enabled
-            Toast.makeText(this, "Bluetooth is not available or not enabled.", Toast.LENGTH_SHORT).show();
-            finish(); // Close the activity
-        } else {
-            // Bluetooth is available and enabled
-            bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+    }
+
+    private void initializeBluetooth(Activity activity) {
+        BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+        if (bluetoothAdapter == null){
+            Toast.makeText(this, "Bluetooth not supported", Toast.LENGTH_SHORT).show();
+        }else {bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         }
     }
 
     private boolean hasPermissions() {
+        Permissions permissions = new Permissions();
+        permissions.checkBluetoothSupport(this);
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
                 checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
+        Permissions permissions = new Permissions();
+        permissions.checkBluetoothSupport(this);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Permission granted, initialize Bluetooth and start scanning
-            initializeBluetooth();
+        // Check if the request is for location permission
+        if(requestCode==Permissions.REQUEST_LOCATION_PERMISSION){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission granted
+                Permissions.grantedPermission(this);
+                // initialize Bluetooth and start scanning
+                initializeBluetooth(this);
 //            scanLeDevice(true);
-        } else {
-            // Permission denied, handle accordingly
-            Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
+                //Location permission denied
+                } else {
+                Permissions.deniedPermission(this);
         }
-    }
+    }}
 
     void scanLeDevice(final boolean enable) {
         if (enable) {
@@ -119,12 +137,12 @@ public class Gatt_Client extends AppCompatActivity {
         }
     }
 
-    private ScanCallback scanCallback = new ScanCallback() {
+    private final ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             if (ActivityCompat.checkSelfPermission(Gatt_Client.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 if (!hasPermissions()) {
-                    // Handle the case where the permission is not granted
+                    // if permission is not granted
                     Toast.makeText(Gatt_Client.this, "Permission denied", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -143,22 +161,20 @@ public class Gatt_Client extends AppCompatActivity {
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
-            Toast.makeText(Gatt_Client.this, "Multiple testing", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Gatt_Client.this, "Scanning batch", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onScanFailed(int errorCode) {
             Toast.makeText(Gatt_Client.this, "failed to scan", Toast.LENGTH_SHORT).show();
         }
-
-
-
     };
     public void stopScan() {
         if (scanning) {
             scanning = false;
             if (ActivityCompat.checkSelfPermission(Gatt_Client.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                 if (!hasPermissions()) {
+                    // if no scanning permissions
                 }
             }
             bluetoothLeScanner.stopScan(scanCallback);
@@ -169,4 +185,3 @@ public class Gatt_Client extends AppCompatActivity {
         }
     }
 }
-

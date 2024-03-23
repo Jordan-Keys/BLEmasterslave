@@ -1,145 +1,115 @@
 package App.MasterSlave;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import com.example.blemasterslave.R;
-import org.jetbrains.annotations.NotNull;
-import android.widget.Button;
-import App.MasterSlave.Gatt_Client;
+import androidx.core.content.ContextCompat;
 
-
-public class Permissions extends AppCompatActivity {
+public class Permissions {
+    // Declaring variables
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
-    private static final int REQUEST_LOCATION_PERMISSION = 2;
-    private BluetoothAdapter bluetoothAdapter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // Initializing Bluetooth adapter
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        checkBluetoothSupport();
-        Button button = findViewById(R.id.scanButton);
-        button.setOnClickListener(v -> {
-            Toast.makeText(this, "Scan has been started", Toast.LENGTH_SHORT).show();// for testing
-            Testing1 Gatt = new Testing1();
-            Gatt.scanLeDevice(true);
-        });
-
-    }
+    public static final int REQUEST_LOCATION_PERMISSION = 2 ;
+    static BluetoothAdapter bluetoothAdapter;
 
     /*=================================>>>>>HANDLING BLUETOOTH PERMISSIONS<<<<<=========================*/
     // method for checking if Bluetooth is supported and enabled
-
-    public void checkBluetoothSupport() {
+    public void checkBluetoothSupport(Activity activity) {
+        // initializing the bluetoothAdapter
+        BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
         // if the device does not support bluetooth
         if (bluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth not supported on this device.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Bluetooth is not supported on this device.", Toast.LENGTH_SHORT).show();//testing
         } else {
             // if bluetooth is supported but not enabled
             if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                     // requesting user to allow bluetooth
-                    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
-                }
+                    activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
+                } // if bluetooth is enabled but already enabled by the user
             } else {
                 // if bluetooth is supported and enabled then check if location permission is granted
-                  checkLocationPermission();
+                checkLocationPermission(activity);
             }
         }
     }
-
     // Handling user response for Bluetooth permission request
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public static void  handleOnActivityResult(Activity activity, int requestCode, int resultCode) {
         if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
-            if (resultCode == RESULT_OK) {
-                // if user allows Bluetooth
-                // also let him allow location permissions
-                checkLocationPermission();// to be uncommented
+            if (resultCode == Activity.RESULT_OK) {
+                // if user allows Bluetooth let them also allow location permissions if not yet allowed
+                checkLocationPermission(activity);
+//                return true; // Indicate successful handling
             } else {
                 // if user denies Bluetooth
-                Toast.makeText(this, "You denied Bluetooth.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "You denied Bluetooth.", Toast.LENGTH_SHORT).show();//testing
             }
         }
+//        return false; // Indicate no handling for other request codes
     }
     //    /*========================================>>>>>LOCATION PERMISSIONS<<<<<==================================*/
     // Method for allowing the user to grant location to the application
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // if location permission is not granted, request user to grant it
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            // if location permission granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // enable user turn on the location services
-                showLocationSettings();
-
-                // if location permission not granted
-            } else {
-                // if the user denies location permissions
-                Toast.makeText(this, "Location permission is required for the app to function well", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Method for checking and requesting for location.
-    private void checkLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    static void checkLocationPermission(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Location permission not granted, request it
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
             // If location permission granted request user to turn on location services
-            isLocationEnabled();
+            isLocationEnabled(activity);
         } else {
             // Location permission already granted, check if location services are enabled
-            if (!isLocationEnabled()) {
+            if (!isLocationEnabled(activity)) {
                 // Location services are disabled, prompt the user to enable them
-                showLocationSettings();
-            } else {
-                // Location services are enabled, start BLE scanning
-//                Gatt_Client Gatt = new Gatt_Client();
-//                Gatt.startBleScanning(this);
-                Toast.makeText(getApplicationContext(), "Scanning Just Started", Toast.LENGTH_SHORT).show();//testing
+                showLocationSettings(activity);
             }
+//            else {
+//                // Location services are enabled, start BLE scanning
+//                Toast.makeText(activity, "Everything is okay scan has Started", Toast.LENGTH_SHORT).show();//testing
+//            }
         }
     }
-
-    // Method to check if location services are enabled
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    // handling user response to location access
+    // for granted permission
+    public static void grantedPermission(Context context) {
+        if (!isLocationEnabled(context)) {
+            // if permission is granted but location show choice dialogue
+            showLocationSettings(context);
+        }// if permission is granted but location is already on location
+    }
+    // for denied permission
+    public static void deniedPermission(Context context) {
+        Toast.makeText(context, "You denied Location Permissions", Toast.LENGTH_SHORT).show();//testing
+    }
+    private static boolean isLocationEnabled(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
-
-    // Method to request user launch location settings screen
-    private void showLocationSettings() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    // method to open a location dialog for the user to choose
+    private static void showLocationSettings(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Devices location is off. Do you want to turn it on?")
                 .setCancelable(false)
-                .setPositiveButton("Yes", (dialog, id) -> openLocationSettings())
+                // if users choice is yes open location settings
+                .setPositiveButton("Yes", (dialog, id) -> openLocationSettings(context))
+                // if users choice is no
                 .setNegativeButton("No", (dialog, id) -> {
-                    // Handling user's choice
-                    Toast.makeText(getApplicationContext(), "Some functionalities may not work properly.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Some functionalities may not work properly.", Toast.LENGTH_SHORT).show();// testing
                 });
         AlertDialog alert = builder.create();
         alert.show();
     }
-
     // Method to open location settings screen
-    private void openLocationSettings() {
+    private static void openLocationSettings(Context context) {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(intent);
+        context.startActivity(intent);
     }
 }
