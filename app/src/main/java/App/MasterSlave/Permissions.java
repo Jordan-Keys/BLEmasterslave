@@ -71,10 +71,9 @@ public class Permissions {
                 // Location services are disabled, prompt the user to enable them
                 showLocationSettings(activity);
             }
-//            else {
-//                // Location services are enabled, start BLE scanning
+// location services are enabled
+// Location services are enabled, start BLE scanning
 //                Toast.makeText(activity, "Everything is okay scan has Started", Toast.LENGTH_SHORT).show();//testing
-//            }
         }
     }
     // handling user response to location access
