@@ -1,57 +1,61 @@
 //package App.MasterSlave;
 //
 //import android.Manifest;
-//import android.app.Activity;
 //import android.bluetooth.BluetoothAdapter;
 //import android.bluetooth.le.BluetoothLeScanner;
 //import android.bluetooth.le.ScanCallback;
 //import android.bluetooth.le.ScanFilter;
 //import android.bluetooth.le.ScanResult;
 //import android.bluetooth.le.ScanSettings;
+//import android.content.Context;
 //import android.content.Intent;
 //import android.content.pm.PackageManager;
 //import android.os.Build;
 //import android.os.Bundle;
 //import android.os.Handler;
+//import android.os.Looper;
 //import android.widget.Button;
 //import android.widget.Toast;
 //import androidx.core.app.ActivityCompat;
+//import androidx.core.content.ContextCompat;
 //import com.example.blemasterslave.R;
 //import androidx.annotation.NonNull;
 //import androidx.appcompat.app.AppCompatActivity;
-//import org.jetbrains.annotations.NotNull;
-//
 //import java.util.ArrayList;
 //import java.util.List;
 //
 //public class Testing3 extends AppCompatActivity {
-//
-//    private BluetoothAdapter bluetoothAdapter;
 //    private BluetoothLeScanner bluetoothLeScanner;
 //    private boolean scanning = false;
-//    private Handler handler = new Handler();
+//    private final Handler handler = new Handler(Looper.getMainLooper());
 //    private static final long SCAN_PERIOD = 10000; // 10 seconds
+//    static BluetoothAdapter bluetoothAdapter;
 //
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        Permissions permissions = new Permissions();
-//        permissions.checkBluetoothSupport(this);
+////        Permissions permissions = new Permissions();
+////        permissions.checkBluetoothSupport(this);
 //        setContentView(R.layout.activity_main);
 //        Button button = findViewById(R.id.scanButton);
 //        button.setOnClickListener(v -> {
 //            scanLeDevice(true);
 //        });
+//        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //
 //        Button button1 = findViewById(R.id.scanButton1);
 //        button1.setOnClickListener(v -> {
 //            stopScan();
 //        });
 //
-//        // if all the required permissions for scanning are granted
+//        Button button2 = findViewById(R.id.closeButton1);
+//        button2.setOnClickListener(v -> {
+//            System.exit(0);
+//        });
+//
+//        // Ensure that the required permissions are granted
 //        if (hasPermissions()) {
-//            initializeBluetoothScan();
-////            scanLeDevice(true);
+//            checkBluetoothScanPermission(this);
 //        } else {
 //            requestPermissions();
 //        }
@@ -61,35 +65,49 @@
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 //        Permissions.handleOnActivityResult(this, requestCode, resultCode);
+////        Permissions.handleOnActivityResult(this, requestCode, resultCode);
+//
 //    }
 //
-//    private void initializeBluetoothScan() {
-//        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+//    public void checkBluetoothScanPermission(Context context) {
+//        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+//            // BLUETOOTH_SCAN permission is granted
+//
+//        } else {
+//            // BLUETOOTH_SCAN permission is not granted
 //            bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
 //        }
 //    }
+//
+//
 //    private boolean hasPermissions() {
+//        Permissions permissions = new Permissions();
+//        permissions.checkBluetoothSupport(this);
 //        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
 //                checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 //    }
+//
 //    private void requestPermissions() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-//        }
+//        Permissions permissions = new Permissions();
+//        permissions.checkBluetoothSupport(this);
 //    }
+//
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//            // Permission granted, initialize Bluetooth and start scanning
-//            initializeBluetoothScan();
-//        } else {
-//            // Permission denied, handle accordingly
-//            requestPermissions();
-//            Toast.makeText(this, "permission denied", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+//        // Check if the request is for location permission
+//        if(requestCode==Permissions.REQUEST_LOCATION_PERMISSION){
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Permission granted
+//                Permissions.grantedPermission(this);
+//                // initialize Bluetooth and start scanning
+//                checkBluetoothScanPermission(this);
+////            scanLeDevice(true);
+//                //Location permission denied
+//            } else {
+//                Permissions.deniedPermission(this);
+//            }
+//        }}
 //
 //    void scanLeDevice(final boolean enable) {
 //        if (enable) {
