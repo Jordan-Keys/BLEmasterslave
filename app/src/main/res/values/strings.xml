@@ -5,4 +5,8 @@
     <string name="advertise">START ADVERTISING</string>
     <string name="stopAdvertising">STOP ADVERTISING</string>
     <string name="close">CLOSE APP</string>
+
+<!--    strings for bottom navigation-->
+    <string name="scanner">SCANNER</string>
+    <string name="advertiser">ADVERTISER</string>
 </resources>
