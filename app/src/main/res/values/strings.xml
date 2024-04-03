@@ -9,4 +9,9 @@
 <!--    strings for bottom navigation-->
     <string name="scanner">SCANNER</string>
     <string name="advertiser">ADVERTISER</string>
+
+    <!--    strings for toolbar navigation-->
+    <string name="map">MAP</string>
+    <string name="history">HISTORY</string>
+    <string name="location">LOCATION</string>
 </resources>
