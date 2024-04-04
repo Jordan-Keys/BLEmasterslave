@@ -1,6 +1,6 @@
 package App.Interfaces.Scanner;
 
-import androidx.lifecycle.LiveData;
+import android.widget.ListView;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,7 +13,7 @@ public class ScannerModelView extends ViewModel {
         mText.setValue("This is scanner fragment");
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void getText(ListView textView) {
+        return;
     }
 }
