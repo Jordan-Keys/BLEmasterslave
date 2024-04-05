@@ -40,7 +40,7 @@
 ////        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //        Permissions permissions = new Permissions();
 //        permissions.checkBluetoothSupport(this);
-//        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_mains);
 //        Button scanButton = findViewById(R.id.scanButton);
 //        scanButton.setOnClickListener(v -> scanLeDevice(true));
 //        Button stopButton = findViewById(R.id.stopButton);
@@ -98,7 +98,7 @@
 //        }}
 //    void scanLeDevice(final boolean enable) {
 //        if (enable) {
-//            // Stops scanning after a predefined scan period
+//            // Stops scanning after a predefined scannerlistview period
 //            handler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
@@ -155,7 +155,7 @@
 //
 //        @Override
 //        public void onScanFailed(int errorCode) {
-//            Toast.makeText(Gatt_Client.this, "failed to scan", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(Gatt_Client.this, "failed to scannerlistview", Toast.LENGTH_SHORT).show();
 //        }
 //    };
 //    public void stopScan() {
