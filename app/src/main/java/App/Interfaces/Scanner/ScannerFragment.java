@@ -1,36 +1,38 @@
 package App.Interfaces.Scanner;
 
+import App.MasterSlave.Scanner.ScanResultAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
+import com.example.blemasterslave.R;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import com.example.blemasterslave.databinding.ScannerFragmentBinding;
+import java.util.ArrayList;
+import java.util.List;
+import App.MasterSlave.Scanner.Scanning;
 
 public class ScannerFragment extends Fragment {
-
-    private ScannerFragmentBinding binding;
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        ScannerModelView dashboardViewModel =
-                new ViewModelProvider(this).get(ScannerModelView.class);
-
-        binding = ScannerFragmentBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final ListView textView = binding.results;
-        dashboardViewModel.getText(textView);
-        return root;
-    }
+    private ScanResultAdapter adapter;
+    private final List<ScannerResultsBuilder> scanResults = new ArrayList<>();
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.scannerlistview, container, false);
+
+        ListView listView = rootView.findViewById(R.id.scannerListView);
+        adapter = new ScanResultAdapter(getActivity(), scanResults);
+        listView.setAdapter(adapter);
+
+        return rootView;
+    }
+
+    // Method to update scannerlistview results
+    public void updateScanResults(List<ScannerResultsBuilder> results) {
+        scanResults.clear();
+        scanResults.addAll(results);
+        adapter.notifyDataSetChanged();
     }
 }
+
+
