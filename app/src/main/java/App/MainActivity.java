@@ -21,11 +21,14 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+
+// inflater to be removed
         //inflating the custom toolbar layout
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customToolbarView = inflater.inflate(R.layout.custom_toolbar, null);
-        ConstraintLayout mainLayout = findViewById(R.id.container);
-        mainLayout.addView(customToolbarView);
+      //  LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View customToolbarView = inflater.inflate(R.layout.custom_toolbar, null);
+//        ConstraintLayout mainLayout = findViewById(R.id.container);
+//        mainLayout.addView(customToolbarView);
 
 
         // Logic for handling the bottom navigation
