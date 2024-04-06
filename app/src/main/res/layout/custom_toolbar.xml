@@ -3,22 +3,25 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@color/red"
+              android:background="#002AFF"
               android:id="@+id/cust"
 >
 
     <Button android:layout_width="wrap_content"
             android:text="@string/map"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             style="?android:attr/buttonBarButtonStyle"/>
 
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/history"
+            android:textColor="@color/white"
             style="?android:attr/buttonBarButtonStyle"/>
 
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/location"
+            android:textColor="@color/white"
             style="?android:attr/buttonBarButtonStyle"/>
 </LinearLayout>
