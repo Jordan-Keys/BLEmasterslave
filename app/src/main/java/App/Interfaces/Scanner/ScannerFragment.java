@@ -14,7 +14,7 @@ import App.MasterSlave.Scanner.Scanning;
 
 public class ScannerFragment extends Fragment {
     private ScanResultAdapter adapter;
-    private final List<ScannerResultsBuilder> scanResults = new ArrayList<>();
+    private List<ScannerResultsBuilder> scanResults = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,7 +24,12 @@ public class ScannerFragment extends Fragment {
         adapter = new ScanResultAdapter(getActivity(), scanResults);
         listView.setAdapter(adapter);
 
+        // Initialize and start scanning
+        Scanning scanning = new Scanning(getActivity(), scanResults, adapter);
+        scanning.scanLeDevices();
+
         return rootView;
+
     }
 
     // Method to update scannerlistview results
