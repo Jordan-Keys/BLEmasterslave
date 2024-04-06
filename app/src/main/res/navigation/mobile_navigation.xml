@@ -9,7 +9,7 @@
             android:id="@+id/scanner"
             android:name="App.Interfaces.Scanner.ScannerFragment"
             android:label="@string/scanner"
-            tools:layout="@layout/scanner_fragment"/>
+            tools:layout="@layout/scannerlistview"/>
 
     <fragment
             android:id="@+id/advertiser"
