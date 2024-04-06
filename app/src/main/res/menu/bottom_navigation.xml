@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@+id/scanner"
-            android:icon="@drawable/ic_launcher_background"
+            android:icon="@drawable/scanbluetooth"
             android:title="@string/scanner"/>
 
     <item
             android:id="@+id/advertiser"
-            android:icon="@drawable/ic_launcher_background"
+            android:icon="@drawable/ibeacon"
             android:title="@string/advertiser"/>
 </menu>

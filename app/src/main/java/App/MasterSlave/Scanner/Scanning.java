@@ -114,9 +114,7 @@ public class Scanning {
             if (deviceName == null) {
                 deviceName = "Unknown Device";
             }
-            // Displaying device name and RSSI using a toast message
-            String message = "Device Name: " + deviceName + "\nRSSI: " + rssi + "\n" + uuidMessage;
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            //Adds scan values to scanResults
             scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString()));
             adapter.notifyDataSetChanged();
         }

@@ -3,8 +3,8 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="#002AFF"
-              android:id="@+id/cust"
+              android:background="@color/blue"
+              android:id="@+id/custom"
 >
 
     <Button android:layout_width="wrap_content"

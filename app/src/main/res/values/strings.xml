@@ -7,11 +7,11 @@
     <string name="close">CLOSE APP</string>
 
 <!--    strings for bottom navigation-->
-    <string name="scanner">SCANNER</string>
-    <string name="advertiser">ADVERTISER</string>
+    <string name="scanner">SCAN</string>
+    <string name="advertiser">ADVERTISE</string>
 
     <!--    strings for toolbar navigation-->
-    <string name="map">MAP</string>
-    <string name="history">HISTORY</string>
-    <string name="location">LOCATION</string>
+    <string name="map">Map</string>
+    <string name="history">History</string>
+    <string name="location">Location</string>
 </resources>
