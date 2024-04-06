@@ -1,5 +1,6 @@
 package App.MasterSlave.Scanner;
 
+import App.Interfaces.Scanner.ScannerResultsBuilder;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -28,9 +29,13 @@ public class Scanning {
     private static final long SCAN_PERIOD = 10000;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Context context;
+    private final List<ScannerResultsBuilder> scanResults;
+    private final ScanResultAdapter adapter;
 
-    public Scanning(Context context) {
+    public Scanning(Context context, List<ScannerResultsBuilder> scanResults, ScanResultAdapter adapter) {
         this.context = context;
+        this.scanResults = scanResults;
+        this.adapter = adapter;
         BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -112,6 +117,8 @@ public class Scanning {
             // Displaying device name and RSSI using a toast message
             String message = "Device Name: " + deviceName + "\nRSSI: " + rssi + "\n" + uuidMessage;
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString()));
+            adapter.notifyDataSetChanged();
         }
     };
 }
