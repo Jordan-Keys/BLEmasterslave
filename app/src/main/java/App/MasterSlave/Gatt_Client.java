@@ -40,7 +40,7 @@
 ////        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 //        Permissions permissions = new Permissions();
 //        permissions.checkBluetoothSupport(this);
-//        setContentView(R.layout.activity_mains);
+//        setContentView(R.layout.testing);
 //        Button scanButton = findViewById(R.id.scanButton);
 //        scanButton.setOnClickListener(v -> scanLeDevice(true));
 //        Button stopButton = findViewById(R.id.stopButton);
