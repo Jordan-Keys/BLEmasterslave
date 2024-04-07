@@ -1,8 +1,6 @@
 package App.MasterSlave.Advertiser;
 
-import App.MasterSlave.Permissions;
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
@@ -11,18 +9,11 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelUuid;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import com.example.blemasterslave.R;
-
-import java.util.UUID;
 
 public class Advertising {
     private BluetoothLeAdvertiser bluetoothLeAdvertiser;
