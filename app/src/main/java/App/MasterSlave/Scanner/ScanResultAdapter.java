@@ -30,12 +30,15 @@ public class ScanResultAdapter extends ArrayAdapter<ScannerResultsBuilder> {
         TextView deviceNameTextView = convertView.findViewById(R.id.deviceNameTextView);
         TextView rssiTextView = convertView.findViewById(R.id.rssiTextView);
         TextView uuidTextView = convertView.findViewById(R.id.uuidTextView);
+        TextView macAddressTextView = convertView.findViewById(R.id.macAddressTextView);
 
         // Populating the data into the template view using the data object
         if (result != null) {
             deviceNameTextView.setText("Device Name: " + result.getDeviceName());
-            rssiTextView.setText("RSSI: " + result.getRssi());
+            rssiTextView.setText("RSSI: " + result.getRssi() + " dBms");
             uuidTextView.setText("UUIDs: " + result.getUuid());
+            macAddressTextView.setText("MAC ADDRESS: " + result.getMacAddress());
+
         }
         return convertView;
     }
