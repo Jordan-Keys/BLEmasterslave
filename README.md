@@ -35,14 +35,12 @@ To get started with the BLE Master-Slave application, follow these steps:
     ```
 
 4. **Run the Application**:
-    - Run `Master.java` on the master device.
-    - Run `Slave.java` on the slave device(s).
 
 5. **Follow On-Screen Instructions**: The application provides prompts and messages for guiding through the process of establishing the BLE connection.
 
 ## Usage
 
-- Modify `Master.java` and `Slave.java` as needed to suit your specific BLE application requirements.
+- Modify `Scanner.java` and 'Advertiser.java' as needed to suit your specific BLE application requirements.
 - Ensure that both master and slave devices are Bluetooth Low Energy compatible.
 - Debug and troubleshoot as necessary by analyzing the console outputs.
 
