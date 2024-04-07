@@ -1,5 +1,6 @@
 BLE Master-Slave Application Project
 This repository contains a Java implementation of a BLE (Bluetooth Low Energy) Master-Slave application. This application demonstrates the communication between a master device and one or multiple slave devices using Bluetooth Low Energy technology.
+Primary purpose to facilitate positioning of mobile beacons with dynamic switching between scanning and advertising 
 
 ## Features
 
