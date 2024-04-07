@@ -1,35 +1,37 @@
 package App.Interfaces.Advertiser;
 
+import App.MasterSlave.Advertiser.Advertising;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import com.example.blemasterslave.databinding.AdvertiserFragmentBinding;
+import com.example.blemasterslave.R;
 
 public class AdvertiserFragment extends Fragment {
 
-    private AdvertiserFragmentBinding binding;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        AdvertiserModelView notificationsViewModel =
-                new ViewModelProvider(this).get(AdvertiserModelView.class);
+        View root = inflater.inflate(R.layout.testing, container, false);
 
-        binding = AdvertiserFragmentBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        Button advertiseButton = root.findViewById(R.id.advertiser);
+        advertiseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle advertise button click
+                startAdvertising(); // Call your advertising method here
+            }
+        });
 
-        final TextView textView = binding.advertiser;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    // Method to start advertising
+    private void startAdvertising() {
+        // Call the advertising method from your Advertising class
+        Advertising advertising = new Advertising(this.getContext());
+        advertising.startAdvertising();
     }
 }
