@@ -22,7 +22,7 @@ public class Permissions {
 
     /*=================================>>>>>HANDLING BLUETOOTH PERMISSIONS<<<<<=========================*/
     // method for checking if Bluetooth is supported and enabled
-    public void checkBluetoothSupport(Activity activity) {
+    public static void checkBluetoothSupport(Activity activity) {
         // initializing the bluetoothAdapter
         BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
