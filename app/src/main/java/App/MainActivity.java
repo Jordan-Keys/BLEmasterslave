@@ -1,11 +1,12 @@
 package App;
 
-import android.content.Context;
+import App.MasterSlave.Permissions;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import com.example.blemasterslave.databinding.ActivityMainBinding;
@@ -21,16 +22,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
-// inflater to be removed
-        //inflating the custom toolbar layout
-      //  LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View customToolbarView = inflater.inflate(R.layout.custom_toolbar, null);
-//        ConstraintLayout mainLayout = findViewById(R.id.container);
-//        mainLayout.addView(customToolbarView);
-
-
         // Logic for handling the bottom navigation
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnItemSelectedListener(item -> {
@@ -44,5 +35,35 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+    // Results returned from bluetooth decision after requesting permission
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Permissions.handleOnActivityResult(this, requestCode, resultCode);
+    }
+    public static final long REQUEST_BLUETOOTH_SCAN_PERMISSION = 1;
+        @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_BLUETOOTH_SCAN_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with advertising
+                Toast.makeText(this, "Scanning permission granted", Toast.LENGTH_SHORT).show();
+            } else {
+                // Permission denied, handle accordingly
+                Toast.makeText(this, "Scanning permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            if(requestCode==Permissions.REQUEST_LOCATION_PERMISSION){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    Permissions.grantedPermission(this);
+                    //Location permission denied
+                } else {
+//                    Toast.makeText(this, "Advertising permission denied", Toast.LENGTH_SHORT).show();
+                    Permissions.deniedPermission(this);
+                }
+            }
+        }
     }
 }
