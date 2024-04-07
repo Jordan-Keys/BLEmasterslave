@@ -23,7 +23,7 @@
             android:theme="@style/Theme.BLEmasterslave"
             tools:targetApi="31">
         <activity
-                android:name="App.MasterSlave.Advertiser.Advertising"
+                android:name="App.MainActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
