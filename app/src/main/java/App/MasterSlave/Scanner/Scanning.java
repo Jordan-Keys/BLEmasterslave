@@ -1,6 +1,7 @@
 package App.MasterSlave.Scanner;
 
 import App.Interfaces.Scanner.ScannerResultsBuilder;
+import App.MasterSlave.Permissions;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -18,7 +19,9 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Scanning {
     // declaring variables
@@ -31,6 +34,7 @@ public class Scanning {
     private final Context context;
     private final List<ScannerResultsBuilder> scanResults;
     private final ScanResultAdapter adapter;
+    private final Set<String> scannedDevices = new HashSet<>();
 
     public Scanning(Context context, List<ScannerResultsBuilder> scanResults, ScanResultAdapter adapter) {
         this.context = context;
@@ -60,6 +64,7 @@ public class Scanning {
 
     // method to start scanning
     public void scanLeDevices() {
+        Permissions.checkBluetoothSupport((Activity) context);
         if (!scanning) {
             // Stops scanning after a predefined scanner period.
             handler.postDelayed(() -> {
@@ -69,26 +74,34 @@ public class Scanning {
                         checkScanPermission();
                     }
                 }
-                bluetoothLeScanner.stopScan(scanCallback);
-                Toast.makeText(context, "Scanning stopped due to timeout", Toast.LENGTH_SHORT).show();
+                if (bluetoothLeScanner != null) {
+                    bluetoothLeScanner.stopScan(scanCallback);
+                    Toast.makeText(context, "Scanning stopped due to timeout", Toast.LENGTH_SHORT).show();
+                }
             }, SCAN_PERIOD);
 
             scanning = true;
-            ScanSettings settings = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                settings = new ScanSettings.Builder()
-                        .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-                        .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-                        .build();
+            if (bluetoothLeScanner != null) {
+                ScanSettings settings = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    settings = new ScanSettings.Builder()
+                            .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+                            .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                            .build();
+                }
+                List<ScanFilter> filters = new ArrayList<>();
+                bluetoothLeScanner.startScan(filters, settings, scanCallback);
+            } else {
+                // Handle null bluetoothLeScanner object
+                Toast.makeText(context, "Bluetooth is turned off", Toast.LENGTH_SHORT).show();
             }
-            List<ScanFilter> filters = new ArrayList<>();
-            bluetoothLeScanner.startScan(filters, settings, scanCallback);
         } else {
             scanning = false;
-            bluetoothLeScanner.stopScan(scanCallback);
-            Toast.makeText(context, "Scanning is already in Progress", Toast.LENGTH_SHORT).show();
+            if (bluetoothLeScanner != null) {
+                bluetoothLeScanner.stopScan(scanCallback);
+                Toast.makeText(context, "Scanning is already in Progress", Toast.LENGTH_SHORT).show();
+            }
         }
-
     }
 
     // call back for scanned results
@@ -108,15 +121,36 @@ public class Scanning {
                     checkScanPermission();
                 }
             }
-            String deviceName = result.getDevice().getName();
-            int rssi = result.getRssi();
+            String macAddress = result.getDevice().getAddress(); // Obtain device MacAddress
+            // Checking if the device MAC address is already in the set
+            if (!scannedDevices.contains(macAddress)) {
+                // Add the MAC address to the set
+                scannedDevices.add(macAddress);
+            String deviceName = result.getDevice().getName(); // Obtain device name
+            int rssi = result.getRssi(); // Obtain RSSI value
             // Checking if device name is null
             if (deviceName == null) {
                 deviceName = "Unknown Device";
             }
-            //Adds scan values to scanResults
-            scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString()));
+           //
+            scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString(), macAddress));
             adapter.notifyDataSetChanged();
+            }
         }
     };
+    // method to stop scanning
+    public void stopScanning() {
+        if (scanning) {
+            scanning = false;
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    checkScanPermission();
+                }
+            }
+            bluetoothLeScanner.stopScan(scanCallback);
+            Toast.makeText(context, "Scanning manually stopped", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Scanning is not active", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
