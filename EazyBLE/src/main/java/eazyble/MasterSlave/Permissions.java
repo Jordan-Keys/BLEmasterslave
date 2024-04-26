@@ -1,4 +1,4 @@
-package App.MasterSlave;
+package eazyble.MasterSlave;
 
 import android.Manifest;
 import android.app.Activity;

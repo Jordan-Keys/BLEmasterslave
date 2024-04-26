@@ -1,23 +1,23 @@
-package App.MasterSlave.Scanner;
+package eazyble.MasterSlave.Scanner;
 
-import App.Interfaces.Scanner.ScannerResultsBuilder;
-import App.MasterSlave.Permissions;
+import eazyble.Interfaces.Scanner.ScannerResultsBuilder;
+import eazyble.MasterSlave.Permissions;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
+import android.bluetooth.le.*;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.*;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.ParcelUuid;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -83,7 +83,7 @@ public class Scanning {
             scanning = true;
             if (bluetoothLeScanner != null) {
                 ScanSettings settings = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     settings = new ScanSettings.Builder()
                             .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
                             .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)

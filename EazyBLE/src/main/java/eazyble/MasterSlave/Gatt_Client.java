@@ -1,4 +1,4 @@
-//package App.MasterSlave;
+package eazyble.MasterSlave;//package App.MasterSlave;
 //
 //import android.Manifest;
 //import android.bluetooth.BluetoothAdapter;
