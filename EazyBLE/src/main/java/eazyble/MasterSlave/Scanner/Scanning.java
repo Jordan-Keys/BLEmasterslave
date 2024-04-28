@@ -1,6 +1,6 @@
 package eazyble.MasterSlave.Scanner;
 
-import eazyble.Interfaces.Scanner.ScannerResultsBuilder;
+import eazyble.ScannerBuilder.ScannerResultsBuilder;
 import eazyble.MasterSlave.Permissions;
 import android.Manifest;
 import android.app.Activity;
@@ -110,7 +110,7 @@ public class Scanning {
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
-            StringBuilder uuidMessage = new StringBuilder("UUIDs: ");
+            StringBuilder uuidMessage = new StringBuilder();
             if (uuids != null) {
                 for (ParcelUuid uuid : uuids) {
                     uuidMessage.append(uuid.toString()).append("\n");
@@ -121,19 +121,38 @@ public class Scanning {
                     checkScanPermission();
                 }
             }
+            // Retrieve the transmission power level
+            int txPowerLevel = 0; // obtain txPower
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                txPowerLevel = result.getTxPower();
+            }
             String macAddress = result.getDevice().getAddress(); // Obtain device MacAddress
             // Checking if the device MAC address is already in the set
             if (!scannedDevices.contains(macAddress)) {
                 // Add the MAC address to the set
                 scannedDevices.add(macAddress);
             String deviceName = result.getDevice().getName(); // Obtain device name
+
             int rssi = result.getRssi(); // Obtain RSSI value
+                //Define thresholds for different distance ranges
+                int veryClose = -50;
+                int close = -70;
+                // Determine proximity based on RSSI value
+                String proximity;
+                if (rssi >= veryClose) {
+                    proximity = "Near";
+                } else if (rssi >= close) {
+                    proximity = "Close";
+                } else {
+                    proximity = "Far";
+                }
+                //Toast.makeText(context, "Proximity: " + proximity, Toast.LENGTH_SHORT).show();
+
             // Checking if device name is null
             if (deviceName == null) {
-                deviceName = "Unknown Device";
+                deviceName = "N/A";
             }
-           //
-            scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString(), macAddress));
+            scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString(), macAddress, proximity));
             adapter.notifyDataSetChanged();
             }
         }
