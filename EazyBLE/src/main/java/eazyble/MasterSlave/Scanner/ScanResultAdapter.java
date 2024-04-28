@@ -1,6 +1,6 @@
 package eazyble.MasterSlave.Scanner;
 
-import eazyble.Interfaces.Scanner.ScannerResultsBuilder;
+import eazyble.ScannerBuilder.ScannerResultsBuilder;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +31,15 @@ public class ScanResultAdapter extends ArrayAdapter<ScannerResultsBuilder> {
         TextView rssiTextView = convertView.findViewById(R.id.rssiTextView);
         TextView uuidTextView = convertView.findViewById(R.id.uuidTextView);
         TextView macAddressTextView = convertView.findViewById(R.id.macAddressTextView);
+        TextView txPower = convertView.findViewById(R.id.txPower);
 
         // Populating the data into the template view using the data object
         if (result != null) {
             deviceNameTextView.setText("Device Name: " + result.getDeviceName());
             rssiTextView.setText("RSSI: " + result.getRssi() + " dBms");
-            uuidTextView.setText("UUIDs: " + result.getUuid());
+            uuidTextView.setText("UUID: "+result.getUuid());
             macAddressTextView.setText("MAC ADDRESS: " + result.getMacAddress());
-
+            txPower.setText("Proximity: " + result.proximity());
         }
         return convertView;
     }

@@ -42,7 +42,7 @@ package eazyble.MasterSlave;//package App.MasterSlave;
 //        bluetoothAdapter = bluetoothManager.getAdapter();
 //        Permissions permissions = new Permissions();
 //        permissions.checkBluetoothSupport(this);
-//        setContentView(R.layout.testing);
+//        setContentView(R.layout.advertising);
 //        Button scanButton = findViewById(R.id.scanButton);
 //        scanButton.setOnClickListener(v -> scanLeDevices());
 //        Button stopButton = findViewById(R.id.stopButton);
