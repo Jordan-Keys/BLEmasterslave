@@ -34,12 +34,13 @@ android {
 
 dependencies {
 
+    implementation(project(":EazyBLE"))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
-    implementation("com.google.firebase:firebase-inappmessaging:20.4.1")
+    implementation("com.google.firebase:firebase-inappmessaging:20.4.2")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     testImplementation("junit:junit:4.13.2")

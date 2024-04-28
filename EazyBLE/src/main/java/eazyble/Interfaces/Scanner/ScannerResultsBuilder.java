@@ -1,4 +1,4 @@
-package App.Interfaces.Scanner;
+package eazyble.Interfaces.Scanner;
 
 
 // data model to hold information about scanned devices

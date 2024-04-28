@@ -1,4 +1,4 @@
-package App.MasterSlave;
+package eazyble.MasterSlave;
 
 import android.Manifest;
 import android.app.Activity;
@@ -28,7 +28,7 @@ public class Permissions {
         bluetoothAdapter = bluetoothManager.getAdapter();
         // if the device does not support bluetooth
         if (bluetoothAdapter == null) {
-            Toast.makeText(activity, "Bluetooth is not supported on this device.", Toast.LENGTH_SHORT).show();//testing
+            Toast.makeText(activity, "Bluetooth is not supported on this device.", Toast.LENGTH_SHORT).show();//advertising
         } else {
             // if bluetooth is supported but not enabled
             if (!bluetoothAdapter.isEnabled()) {
@@ -52,7 +52,7 @@ public class Permissions {
 //                return true; // Indicate successful handling
             } else {
                 // if user denies Bluetooth
-                Toast.makeText(activity, "You denied Bluetooth.", Toast.LENGTH_SHORT).show();//testing
+                Toast.makeText(activity, "You denied Bluetooth.", Toast.LENGTH_SHORT).show();//advertising
             }
         }
 //        return false; // Indicate no handling for other request codes
@@ -73,7 +73,7 @@ public class Permissions {
             }
 // location services are enabled
 // Location services are enabled, start BLE scanning
-//                Toast.makeText(activity, "Everything is okay scannerlistview has Started", Toast.LENGTH_SHORT).show();//testing
+//                Toast.makeText(activity, "Everything is okay scannerlistview has Started", Toast.LENGTH_SHORT).show();//advertising
         }
     }
     // handling user response to location access
@@ -86,7 +86,7 @@ public class Permissions {
     }
     // for denied permission
     public static void deniedPermission(Context context) {
-        Toast.makeText(context, "You denied Location Permissions", Toast.LENGTH_SHORT).show();//testing
+        Toast.makeText(context, "You denied Location Permissions", Toast.LENGTH_SHORT).show();//advertising
     }
     private static boolean isLocationEnabled(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -101,7 +101,7 @@ public class Permissions {
                 .setPositiveButton("Yes", (dialog, id) -> openLocationSettings(context))
                 // if users choice is no
                 .setNegativeButton("No", (dialog, id) -> {
-                    Toast.makeText(context, "Some functionalities may not work properly.", Toast.LENGTH_SHORT).show();// testing
+                    Toast.makeText(context, "Some functionalities may not work properly.", Toast.LENGTH_SHORT).show();// advertising
                 });
         AlertDialog alert = builder.create();
         alert.show();

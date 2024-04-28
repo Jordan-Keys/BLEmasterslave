@@ -1,8 +1,5 @@
-//package App.MasterSlave;
+package eazyble.MasterSlave;//package App.MasterSlave;
 //
-//import App.Interfaces.Scanner.ScannerResultsBuilder;
-//import App.MasterSlave.Permissions;
-//import App.MasterSlave.Scanner.ScanResultAdapter;
 //import android.Manifest;
 //import android.bluetooth.BluetoothAdapter;
 //import android.bluetooth.BluetoothManager;
@@ -15,7 +12,7 @@
 //import android.content.Intent;
 //import android.content.pm.PackageManager;
 //import android.os.*;
-//import android.widget.ListView;
+//import android.widget.Button;
 //import android.widget.Toast;
 //import androidx.annotation.RequiresApi;
 //import androidx.core.app.ActivityCompat;
@@ -27,10 +24,8 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//public class Testing5 extends AppCompatActivity {
+//public class ScanTesting extends AppCompatActivity {
 //    // declaring variables
-//    private final List<ScannerResultsBuilder> scanResults = new ArrayList<>();
-//    private ScanResultAdapter adapter;
 //    private BluetoothLeScanner bluetoothLeScanner;
 //    static BluetoothAdapter bluetoothAdapter;
 //    public static final long REQUEST_BLUETOOTH_SCAN_PERMISSION = 1;
@@ -43,27 +38,22 @@
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+//
 //        bluetoothAdapter = bluetoothManager.getAdapter();
 //        Permissions permissions = new Permissions();
 //        permissions.checkBluetoothSupport(this);
-//        setContentView(R.layout.scannerlistview);
-//        adapter = new ScanResultAdapter(this, scanResults);
-//        ListView listView = findViewById(R.id.scannerListView);
-//        listView.setAdapter(adapter);
-//
-//
-////        Button scanButton = findViewById(R.id.scanButton);
-////        scanButton.setOnClickListener(v -> scanLeDevices());
-////        Button stopButton = findViewById(R.id.stopButton);
-////        stopButton.setOnClickListener(v -> stopScanning());
-////        Button closeButton = findViewById(R.id.closeButton);
-////        closeButton.setOnClickListener(v -> System.exit(0));
+//        setContentView(R.layout.testing);
+//        Button scanButton = findViewById(R.id.scanButton);
+//        scanButton.setOnClickListener(v -> scanLeDevices());
+//        Button stopButton = findViewById(R.id.stopButton);
+//        stopButton.setOnClickListener(v -> stopScanning());
+//        Button closeButton = findViewById(R.id.closeButton);
+//        closeButton.setOnClickListener(v -> System.exit(0));
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 //            checkScanPermission(this);
 //        }else {
 //            bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
 //        }
-//        scanLeDevices();
 //    }
 //
 //    // Results returned from bluetooth decision after requesting permission
@@ -101,11 +91,11 @@
 //            if(requestCode==Permissions.REQUEST_LOCATION_PERMISSION){
 //                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                    // Permission granted
-//                    Permissions.grantedPermission(this);
+//                Permissions.grantedPermission(this);
 //                    //Location permission denied
 //                } else {
 ////                    Toast.makeText(this, "Advertising permission denied", Toast.LENGTH_SHORT).show();
-//                    Permissions.deniedPermission(this);
+//                Permissions.deniedPermission(this);
 //                }
 //            }
 //
@@ -113,20 +103,20 @@
 //    }
 //
 //    // method to start scanning
-//    public void scanLeDevices() {
+//    private void scanLeDevices() {
 //        if (!scanning) {
 //            // Stops scanning after a predefined scannerlistview period.
 //            handler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
 //                    scanning = false;
-//                    if (ActivityCompat.checkSelfPermission(Testing5.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+//                    if (ActivityCompat.checkSelfPermission(ScanTesting.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
 //                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                            checkScanPermission(Testing5.this);
+//                            checkScanPermission(ScanTesting.this);
 //                        }
 //                    }
 //                    bluetoothLeScanner.stopScan(scanCallback);
-//                    Toast.makeText(Testing5.this, "Scanning stopped due to timeout", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ScanTesting.this, "Scanning stopped due to timeout", Toast.LENGTH_SHORT).show();
 //                }
 //            }, SCAN_PERIOD);
 //
@@ -144,7 +134,7 @@
 //        } else {
 //            scanning = false;
 //            bluetoothLeScanner.stopScan(scanCallback);
-//            Toast.makeText(Testing5.this, "Scanning is already in Progress", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ScanTesting.this, "Scanning is already in Progress", Toast.LENGTH_SHORT).show();
 //        }
 //
 //    }
@@ -155,13 +145,13 @@
 //            scanning = false;
 //            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                    checkScanPermission(Testing5.this);
+//                    checkScanPermission(ScanTesting.this);
 //                }
 //            }
 //            bluetoothLeScanner.stopScan(scanCallback);
-//            Toast.makeText(Testing5.this, "Scanning manually stopped", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ScanTesting.this, "Scanning manually stopped", Toast.LENGTH_SHORT).show();
 //        } else {
-//            Toast.makeText(Testing5.this, "Scanning is not active", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ScanTesting.this, "Scanning is not active", Toast.LENGTH_SHORT).show();
 //        }
 //    }
 //
@@ -177,33 +167,29 @@
 //                    uuidMessage.append(uuid.toString()).append("\n");
 //                }
 //            }
-//            if (ActivityCompat.checkSelfPermission(Testing5.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+//            if (ActivityCompat.checkSelfPermission(ScanTesting.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                    checkScanPermission(Testing5.this);
+//                    checkScanPermission(ScanTesting.this);
 //                }
 //            }
-//            String macAddress = result.getDevice().getAddress();
 //            String deviceName = result.getDevice().getName();
 //            int rssi = result.getRssi();
 //            // Check if device name is null and provide a default value
 //            if (deviceName == null) {
 //                deviceName = "Unknown Device";
 //            }
-//            // Displaying device name and RSSI using a toast message
-//            String message = "Device Name: " + deviceName + "\nRSSI: " + rssi + "\n" + uuidMessage + "\nMAC Address: " + macAddress ;
-//            Toast.makeText(Testing5.this, message, Toast.LENGTH_SHORT).show();
-//
-//            scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString(), macAddress));
-//            adapter.notifyDataSetChanged();
+//            // Display device name and RSSI using a toast message
+//            String message = "Device Name: " + deviceName + "\nRSSI: " + rssi + "\n" + uuidMessage;
+//            Toast.makeText(ScanTesting.this, message, Toast.LENGTH_SHORT).show();
 //        }
-//        // method for multiple scannerlistview results
+//    // method for multiple scannerlistview results
 //        @Override
 //        public void onBatchScanResults(List<ScanResult> results) {
-//            Toast.makeText(Testing5.this, "Multiple Scans", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ScanTesting.this, "Multiple Scans", Toast.LENGTH_SHORT).show();
 //        }
 //        @Override
 //        public void onScanFailed(int errorCode) {
-//            Toast.makeText(Testing5.this, "failed to scannerlistview", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ScanTesting.this, "failed to scannerlistview", Toast.LENGTH_SHORT).show();
 //        }
 //    };
 //}

@@ -1,5 +1,5 @@
-//package App.MasterSlave;
-//import App.MasterSlave.Advertiser.Advertising;
+package eazyble.MasterSlave;//package App.MasterSlave;
+//import Advertiser.MasterSlave.eazyble.Advertising;
 //import android.os.Bundle;
 //import androidx.annotation.Nullable;
 //import androidx.appcompat.app.AppCompatActivity;
