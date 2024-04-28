@@ -93,6 +93,12 @@ public class Advertising {
                     dataBuilder.setIncludeDeviceName(true)
                         .setIncludeDeviceName(Boolean.parseBoolean(deviceName));
                 }
+                if (uuid != null && !uuid.isEmpty()) {
+                    dataBuilder.addServiceUuid(ParcelUuid.fromString(uuid));
+                } else {
+                    // If UUID is not specified, use a fixed one
+                    dataBuilder.addServiceUuid(ParcelUuid.fromString("0000110E-0000-1000-8000-00805F9B34FB"));
+                }
                 data = dataBuilder.build();
                 bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
             }else{
