@@ -1,6 +1,6 @@
 package eazyble.MasterSlave;//package App.MasterSlave;
 //
-//import Scanner.Interfaces.eazyble.ScannerResultsBuilder;
+//import Scanner.ScannerBuilder.eazyble.ScannerResultsBuilder;
 //import MasterSlave.eazyble.Permissions;
 //import Scanner.MasterSlave.eazyble.ScanResultAdapter;
 //import android.Manifest;
