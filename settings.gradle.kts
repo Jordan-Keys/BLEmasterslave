@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "BLEmasterslave"
 include(":app")
+include(":EazyBLE")
