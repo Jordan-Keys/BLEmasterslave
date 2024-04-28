@@ -1,6 +1,5 @@
 package App;
 
-import App.MasterSlave.Permissions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import androidx.navigation.Navigation;
 import com.example.blemasterslave.databinding.ActivityMainBinding;
 import com.example.blemasterslave.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import eazyble.MasterSlave.Permissions;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     Permissions.grantedPermission(this);
                     //Location permission denied
                 } else {
-//                    Toast.makeText(this, "Advertising permission denied", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Advertisings permission denied", Toast.LENGTH_SHORT).show();
                     Permissions.deniedPermission(this);
                 }
             }
