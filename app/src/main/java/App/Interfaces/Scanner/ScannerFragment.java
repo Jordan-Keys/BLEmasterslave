@@ -1,6 +1,6 @@
 package App.Interfaces.Scanner;
 
-import App.MasterSlave.Scanner.ScanResultAdapter;
+import eazyble.MasterSlave.Scanner.ScanResultAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +10,8 @@ import com.example.blemasterslave.R;
 import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
-
-import App.MasterSlave.Scanner.Scanning;
+import eazyble.MasterSlave.Scanner.Scanning;
+import eazyble.ScannerBuilder.ScannerResultsBuilder;
 
 public class ScannerFragment extends Fragment {
     private ScanResultAdapter adapter;
