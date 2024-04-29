@@ -27,6 +27,12 @@ public class AdvertiserFragment extends Fragment {
                 advertising.startAdvertising(false, null, true);
         });
 
+        Button stopAdvertise = root.findViewById(R.id.stop_advertiser);
+        stopAdvertise.setOnClickListener(v -> {
+            // Handle advertise button click
+            advertising.stopAdvertising();
+        });
+
         Button customAdvertise = root.findViewById(R.id.custom_advertiser);
         customAdvertise.setOnClickListener(v -> {
             // Handle advertise button click
