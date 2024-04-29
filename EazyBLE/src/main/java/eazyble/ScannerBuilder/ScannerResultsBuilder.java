@@ -1,13 +1,12 @@
 package eazyble.ScannerBuilder;
 
-
 // data model to hold information about scanned devices
 public class ScannerResultsBuilder {
-    private String deviceName;
-    private int rssi;
-    private String uuid;
-    private String macAddress;
-    private String proximity;
+    private final String deviceName;
+    private final int rssi;
+    private final String uuid;
+    private final String macAddress;
+    private final String proximity;
 
     public ScannerResultsBuilder(String deviceName, int rssi, String uuid, String macAddress, String proximity) {
         this.deviceName = deviceName;

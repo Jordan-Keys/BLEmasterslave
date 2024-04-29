@@ -121,11 +121,6 @@ public class Scanning {
                     checkScanPermission();
                 }
             }
-            // Retrieve the transmission power level
-            int txPowerLevel = 0; // obtain txPower
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                txPowerLevel = result.getTxPower();
-            }
             String macAddress = result.getDevice().getAddress(); // Obtain device MacAddress
             // Checking if the device MAC address is already in the set
             if (!scannedDevices.contains(macAddress)) {

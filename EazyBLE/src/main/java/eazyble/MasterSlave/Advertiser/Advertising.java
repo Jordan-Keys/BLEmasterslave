@@ -37,20 +37,20 @@ public class Advertising {
         this.bluetoothAdapter = bluetoothManager.getAdapter();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            checkScanPermission();
+            checkAdvertisePermission();
         } else {
             bluetoothLeAdvertiser = this.bluetoothAdapter.getBluetoothLeAdvertiser();
         }
     }
      //method to check bluetooth permissions
     @RequiresApi(api = Build.VERSION_CODES.S)
-    private void checkScanPermission() {
+    private void checkAdvertisePermission() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) context,
-                    new String[]{Manifest.permission.BLUETOOTH_SCAN},
+                    new String[]{Manifest.permission.BLUETOOTH_ADVERTISE},
                     (int) REQUEST_BLUETOOTH_ADVERTISE_PERMISSION);
         } else {
-            // BLUETOOTH_SCAN permission is already granted
+            // BLUETOOTH_ADVERTISING permission is already granted
             Toast.makeText(context, "Advertising permission already granted", Toast.LENGTH_SHORT).show();
         }
     }
@@ -66,7 +66,7 @@ public class Advertising {
                 advertising = false;
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        checkScanPermission();
+                        checkAdvertisePermission();
                     }
                 }
                 if (bluetoothLeAdvertiser != null) {
@@ -87,8 +87,8 @@ public class Advertising {
                 AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
                 if (includeDeviceName) {
                     String deviceName = bluetoothAdapter.getName();
-                    if (deviceName != null && deviceName.length() > 10) { // 10 is the maximum length for device name
-                        deviceName = deviceName.substring(0, 9); // Truncate if longer than 10 characters
+                    if (deviceName != null && deviceName.length() > 10) {
+                        deviceName = deviceName.substring(0, 5); // Truncate if longer than 10 characters
                     }
                     dataBuilder.setIncludeDeviceName(true)
                         .setIncludeDeviceName(Boolean.parseBoolean(deviceName));
@@ -105,13 +105,13 @@ public class Advertising {
                 // advertisement data
                 settings = new AdvertiseSettings.Builder()
                         .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                       // .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
                         .setConnectable(false)
                         .build();
 
                 data = new AdvertiseData.Builder()
-                        .setIncludeDeviceName(false)
-                        .setIncludeTxPowerLevel(true)
+                        .setIncludeDeviceName(true)
+                        .setIncludeTxPowerLevel(false)
                         .addServiceUuid(ParcelUuid.fromString("0000110E-0000-1000-8000-00805F9B34FB"))
                         .build();
                 bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
@@ -154,7 +154,7 @@ public class Advertising {
             advertising = false;
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    checkScanPermission();
+                    checkAdvertisePermission();
                 }
             }
             bluetoothLeAdvertiser.stopAdvertising(advertiseCallback);
