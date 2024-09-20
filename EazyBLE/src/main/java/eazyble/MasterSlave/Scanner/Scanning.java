@@ -171,7 +171,8 @@ public class Scanning {
                 scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString(), macAddress, proximity, txPower));
             }
 
-           
+            // Notify the adapter of the changes
+            adapter.notifyDataSetChanged();
         }
     };
 
