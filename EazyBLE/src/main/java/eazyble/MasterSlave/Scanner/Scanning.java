@@ -1,7 +1,7 @@
 package eazyble.MasterSlave.Scanner;
 
 import eazyble.ScannerBuilder.ScannerResultsBuilder;
-import eazyble.MasterSlave.Permissions;
+import eazyble.Permissions;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
