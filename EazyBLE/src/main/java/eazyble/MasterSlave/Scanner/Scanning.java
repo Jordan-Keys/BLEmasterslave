@@ -133,7 +133,10 @@ public class Scanning {
             String macAddress = result.getDevice().getAddress();
             String deviceName = result.getDevice().getName();
 
-
+            // if the scanned device is not ble device
+            if (deviceName == null || deviceName.isEmpty()) {
+                deviceName = "N/A";
+            }
 
             int rssi = result.getRssi();  // Get RSSI value
             int txPower = result.getScanRecord().getTxPowerLevel();
@@ -168,8 +171,7 @@ public class Scanning {
                 scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString(), macAddress, proximity, txPower));
             }
 
-            // Notify the adapter of the changes
-            adapter.notifyDataSetChanged();
+           
         }
     };
 
