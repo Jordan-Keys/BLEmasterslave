@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.provider.Settings;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
@@ -23,26 +24,40 @@ public class Permissions {
     /*=================================>>>>>HANDLING BLUETOOTH PERMISSIONS<<<<<=========================*/
     // method for checking if Bluetooth is supported and enabled
     public static void checkBluetoothSupport(Activity activity) {
-        // initializing the bluetoothAdapter
         BluetoothManager bluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
-        // if the device does not support bluetooth
+
+        // Check if Bluetooth is supported
         if (bluetoothAdapter == null) {
-            Toast.makeText(activity, "Bluetooth is not supported on this device.", Toast.LENGTH_SHORT).show();//advertising
+            Toast.makeText(activity, "Bluetooth is not supported on this device.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // For Android 12 (API level 31) and above
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BLUETOOTH);
+                return;
+            }
         } else {
-            // if bluetooth is supported but not enabled
-            if (!bluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // requesting user to allow bluetooth
-                    activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
-                } // if bluetooth is enabled but already enabled by the user
-            } else {
-                // if bluetooth is supported and enabled then check if location permission is granted
-                checkLocationPermission(activity);
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, REQUEST_ENABLE_BLUETOOTH);
+                return;
             }
         }
+
+        // Check if Bluetooth is enabled
+        if (!bluetoothAdapter.isEnabled()) {
+            // Bluetooth is disabled, prompt user to enable it
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
+        } else {
+            // Bluetooth is already enabled, continue
+            checkLocationPermission(activity);
+        }
     }
+
     // Handling user response for Bluetooth permission request
     public static void  handleOnActivityResult(Activity activity, int requestCode, int resultCode) {
         if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
@@ -71,9 +86,6 @@ public class Permissions {
                 // Location services are disabled, prompt the user to enable them
                 showLocationSettings(activity);
             }
-// location services are enabled
-// Location services are enabled, start BLE scanning
-//                Toast.makeText(activity, "Everything is okay scannerlistview has Started", Toast.LENGTH_SHORT).show();//advertising
         }
     }
     // handling user response to location access
