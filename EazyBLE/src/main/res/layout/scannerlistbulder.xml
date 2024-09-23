@@ -30,6 +30,12 @@ android:background="@color/white">
             android:textSize="14sp"
             android:textColor="@android:color/black"/>
     <TextView
+            android:id="@+id/proximity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"/>
+    <TextView
             android:id="@+id/txPower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
