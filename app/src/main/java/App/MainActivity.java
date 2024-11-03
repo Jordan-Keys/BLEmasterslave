@@ -11,7 +11,7 @@ import androidx.navigation.Navigation;
 import com.example.blemasterslave.databinding.ActivityMainBinding;
 import com.example.blemasterslave.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import eazyble.MasterSlave.Permissions;
+import eazyble.Permissions;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;

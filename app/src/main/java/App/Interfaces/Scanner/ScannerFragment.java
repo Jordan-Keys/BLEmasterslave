@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
 import eazyble.MasterSlave.Scanner.Scanning;
-import eazyble.ScannerBuilder.ScannerResultsBuilder;
+import eazyble.MasterSlave.Scanner.ScannerResultsBuilder;
 
 public class ScannerFragment extends Fragment {
     private ScanResultAdapter adapter;
