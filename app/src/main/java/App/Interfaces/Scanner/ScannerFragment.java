@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import com.example.blemasterslave.R;
 import androidx.fragment.app.Fragment;
@@ -27,7 +28,19 @@ public class ScannerFragment extends Fragment {
 
         // Initialize and start scanning
         Scanning scanning = new Scanning(requireActivity(), scanResults, adapter);
-        scanning.scanLeDevices();
+        //scanning.scanLeDevices();
+        //start scanning
+        Button startScan = rootView.findViewById(R.id.startScan);
+        startScan.setOnClickListener(v -> {
+            scanResults.clear(); // Clear old results
+            adapter.notifyDataSetChanged(); // Update the list
+            scanning.scanLeDevices();
+        });
+        //Stop scanning
+        Button stopScan = rootView.findViewById(R.id.stopScan);
+        stopScan.setOnClickListener(v -> {
+            scanning.stopScanning();
+        });
 
         return rootView;
 
