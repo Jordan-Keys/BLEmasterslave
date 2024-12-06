@@ -10,14 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://maven.pkg.github.com/samueltexa/CommunicationLibrary")
-            }
-
+        maven {url = uri("https://jitpack.io")}
     }
 }
 
 rootProject.name = "BLEmasterslave"
 include(":app")
 include(":EazyBLE")
-include(":blecommuniction")
