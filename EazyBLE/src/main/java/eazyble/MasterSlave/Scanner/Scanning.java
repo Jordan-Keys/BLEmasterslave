@@ -12,34 +12,36 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelUuid;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class Scanning {
-    // Declaring variables
     private BluetoothLeScanner bluetoothLeScanner;
     public static final long REQUEST_BLUETOOTH_SCAN_PERMISSION = 1;
     private boolean scanning;
-    // Stop scanning after 10 seconds
     private static final long SCAN_PERIOD = 100000;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Context context;
-    private final List<ScannerResultsBuilder> scanResults;
-    private final ScanResultAdapter adapter;
-    private final Set<String> scannedDevices = new HashSet<>();
     private final BluetoothAdapter bluetoothAdapter;
 
-    public Scanning(Context context, List<ScannerResultsBuilder> scanResults, ScanResultAdapter adapter) {
+    // Map to store scan results with MAC address as the key
+    private final Map<String, String> scanResultsMap;
+
+    public interface ScanResultListener {
+        void onDeviceFound(Map<String, String> devices);
+    }
+    private ScanResultListener scanResultListener;
+
+    public Scanning(Context context) {
         this.context = context;
-        this.scanResults = scanResults;
-        this.adapter = adapter;
+        this.scanResultsMap = new HashMap<>();
         BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -50,20 +52,20 @@ public class Scanning {
         }
     }
 
-    // Method to check Bluetooth permissions
+    // Setter for the ScanResultListener
+    public void setScanResultListener(ScanResultListener listener) {
+        this.scanResultListener = listener;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void checkScanPermission() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) context,
                     new String[]{Manifest.permission.BLUETOOTH_SCAN},
                     (int) REQUEST_BLUETOOTH_SCAN_PERMISSION);
-        } //else {
-        // BLUETOOTH_SCAN permission is already granted
-        // Toast.makeText(context, "Scanning permission already granted", Toast.LENGTH_SHORT).show();
-        // }
+        }
     }
 
-    // Method to start scanning
     public void scanLeDevices() {
         Permissions.checkBluetoothSupport((Activity) context);
         if (!bluetoothAdapter.isEnabled()) {
@@ -72,7 +74,6 @@ public class Scanning {
         }
 
         if (!scanning) {
-            // Stops scanning after a predefined scan period.
             handler.postDelayed(() -> {
                 scanning = false;
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
@@ -101,7 +102,6 @@ public class Scanning {
                 List<ScanFilter> filters = new ArrayList<>();
                 bluetoothLeScanner.startScan(filters, settings, scanCallback);
             } else {
-                // Handle null bluetoothLeScanner object
                 Toast.makeText(context, "Bluetooth is turned off", Toast.LENGTH_SHORT).show();
             }
         } else {
@@ -113,7 +113,6 @@ public class Scanning {
         }
     }
 
-    // Callback for scanned results
     private final ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
@@ -125,23 +124,16 @@ public class Scanning {
                     uuidMessage.append(uuid.toString());
                 }
             }
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    checkScanPermission();
-                }
-            }
+
             String macAddress = result.getDevice().getAddress();
             String deviceName = result.getDevice().getName();
 
-            // if the scanned device is not ble device
             if (deviceName == null || deviceName.isEmpty()) {
-                deviceName = "N/A";
+                return;
             }
 
-            int rssi = result.getRssi();  // Get RSSI value
-            int txPower = result.getScanRecord().getTxPowerLevel();
+            int rssi = result.getRssi();
 
-            // Define thresholds for proximity determination
             int veryClose = -50;
             int close = -70;
             String proximity;
@@ -152,31 +144,29 @@ public class Scanning {
             } else {
                 proximity = "Far";
             }
-            // Update existing device in the list or add a new one
-            boolean deviceUpdated = false;
-            for (int i = 0; i < scanResults.size(); i++) {
-                ScannerResultsBuilder scannedDevice = scanResults.get(i);
-                if (scannedDevice.getMacAddress().equals(macAddress)) {
-                    // Updating the existing device with new data
-                    scannedDevice.setRssi(rssi);
-                    scannedDevice.setProximity(proximity);
-                    scannedDevice.setUuid(uuidMessage.toString());
-                    deviceUpdated = true;
-                    break;
-                }
-            }
 
-            if (!deviceUpdated) {
-                // Add new device to the scanResults if not already there
-                scanResults.add(new ScannerResultsBuilder(deviceName, rssi, uuidMessage.toString(), macAddress, proximity, txPower));
-            }
+            // Filtering the data to be re-advertised
+            // Trim the device name to only the first 4 characters
+            String shortDeviceName = deviceName.length() > 4 ? deviceName.substring(0, 4) : deviceName;
+            String deviceInfoForAdvertising = macAddress + shortDeviceName + rssi;
+            Log.d("AdvertisingData", "Advertised: " + deviceInfoForAdvertising.toString());
 
-            // Notify the adapter of the changes
-            adapter.notifyDataSetChanged();
+            // Store the result in the map
+            String deviceInfo = "Name: " + deviceName +
+                    " RSSI: " + rssi +
+                    " Proximity: " + proximity;
+
+            // Store the result in the map
+            scanResultsMap.put(macAddress, deviceInfo);
+            Log.d("ScannedDevices", "HashMap: " + scanResultsMap.toString());
+
+            // Notify the listener with the updated devices
+            if (scanResultListener != null) {
+                scanResultListener.onDeviceFound(scanResultsMap);
+            }
         }
     };
 
-    // Method to stop scanning
     public void stopScanning() {
         if (scanning) {
             scanning = false;
