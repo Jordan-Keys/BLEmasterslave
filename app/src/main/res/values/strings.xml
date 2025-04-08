@@ -21,4 +21,5 @@
     <string name="include_device_name">Include Device Name</string>
     <string name="enter_major_optional">Enter Major(Optional)</string>
     <string name="enter_minor_optional">Enter Minor(Optional)</string>
+    <string name="text">Scanned Devices will appear here</string>
 </resources>
