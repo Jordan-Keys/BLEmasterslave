@@ -31,7 +31,6 @@ public class ScanResultAdapter extends ArrayAdapter<ScannerResultsBuilder> {
         TextView uuidTextView = convertView.findViewById(R.id.uuidTextView);
         TextView macAddressTextView = convertView.findViewById(R.id.macAddressTextView);
         TextView proximity = convertView.findViewById(R.id.proximity);
-        TextView txPower = convertView.findViewById(R.id.txPower);
 
 
         // Populating the data into the template view using the data object
@@ -41,10 +40,8 @@ public class ScanResultAdapter extends ArrayAdapter<ScannerResultsBuilder> {
             uuidTextView.setText("UUID: "+result.getUuid());
             macAddressTextView.setText("MAC ADDRESS: " + result.getMacAddress());
             proximity.setText("Proximity: " + result.getProximity());
-            txPower.setText("txPower: " + result.getPower());
         }
         return convertView;
     }
 }
-
 
