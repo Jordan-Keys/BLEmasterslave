@@ -11,25 +11,7 @@
               android:gravity="center"
               android:padding="10dp"
               android:textStyle="bold"
-              android:textSize="20dp"
-              android:text="BLE DEMOSTRATION APP"
+              android:textSize="20sp"
+              android:text="@string/demonstration"
               android:textColor="@color/white"/>
-
-<!--    <Button android:layout_width="wrap_content"-->
-<!--            android:text="@string/map"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/white"-->
-<!--            style="?android:attr/buttonBarButtonStyle"/>-->
-
-<!--    <Button android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/history"-->
-<!--            android:textColor="@color/white"-->
-<!--            style="?android:attr/buttonBarButtonStyle"/>-->
-
-<!--    <Button android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/location"-->
-<!--            android:textColor="@color/white"-->
-<!--            style="?android:attr/buttonBarButtonStyle"/>-->
 </LinearLayout>
