@@ -4,22 +4,23 @@
     <string name="custom_advertise">CUSTOM</string>
     <string name="stopAdvertising">STOP ADVERTISING</string>
     <string name="scan">START SCANNING</string>
-    <string name="stop">STOP SCANNING</string>
+
+<!--    Strings for toolbar-->
+    <string name="startScan">SCAN</string>
+    <string name="stop">STOP</string>
+    <string name="startAdv">ADVERTISE</string>
+    <string name="auto">AUTO</string>
 
 <!--    strings for bottom navigation-->
-    <string name="scanner">SCAN</string>
-    <string name="advertiser">ADVERTISE</string>
+    <string name="scanner">CLIENT</string>
+    <string name="advertiser">SINK</string>
 
-    <!--    strings for toolbar navigation-->
-    <string name="map">Map</string>
-    <string name="history">History</string>
-    <string name="location">Location</string>
-    <string name="advertise">ADVERTISE</string>
-    <string name="advertising_configuration">Advertisng Configuration</string>
-    <string name="include_tx_power">Include Tx Power</string>
-    <string name="enter_uuid">Enter UUID</string>
-    <string name="include_device_name">Include Device Name</string>
-    <string name="enter_major_optional">Enter Major(Optional)</string>
-    <string name="enter_minor_optional">Enter Minor(Optional)</string>
-    <string name="text">Scanned Devices will appear here</string>
+    <!--    strings for custom tool bar-->
+    <string name="demonstration">BLE DEMONSTRATION APP</string>
+    <string name="stop_sink">STOP SINK</string>
+    <string name="radar">RADAR</string>
+    <string name="start_sink">START SINK</string>
+    <string name="manual">MANUAL</string>
+
+
 </resources>
