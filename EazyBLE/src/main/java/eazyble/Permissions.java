@@ -67,7 +67,7 @@ public class Permissions {
 //                return true; // Indicate successful handling
             } else {
                 // if user denies Bluetooth
-                Toast.makeText(activity, "You denied Bluetooth.", Toast.LENGTH_SHORT).show();//advertising
+                Toast.makeText(activity, "You denied Bluetooth.", Toast.LENGTH_SHORT).show();//sink
             }
         }
 //        return false; // Indicate no handling for other request codes
@@ -98,7 +98,7 @@ public class Permissions {
     }
     // for denied permission
     public static void deniedPermission(Context context) {
-        Toast.makeText(context, "You denied Location Permissions", Toast.LENGTH_SHORT).show();//advertising
+        Toast.makeText(context, "You denied Location Permissions", Toast.LENGTH_SHORT).show();//sink
     }
     private static boolean isLocationEnabled(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -113,7 +113,7 @@ public class Permissions {
                 .setPositiveButton("Yes", (dialog, id) -> openLocationSettings(context))
                 // if users choice is no
                 .setNegativeButton("No", (dialog, id) -> {
-                    Toast.makeText(context, "Some functionalities may not work properly.", Toast.LENGTH_SHORT).show();// advertising
+                    Toast.makeText(context, "Some functionalities may not work properly.", Toast.LENGTH_SHORT).show();// sink
                 });
         AlertDialog alert = builder.create();
         alert.show();
