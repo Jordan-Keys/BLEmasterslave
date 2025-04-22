@@ -7,16 +7,14 @@ public class ScannerResultsBuilder {
     private String uuid;
     private final String macAddress;
     private String proximity;
-    private final int txPower;
 
     // Constructor to initialize the scanned device
-    public ScannerResultsBuilder(String deviceName, int rssi, String uuid, String macAddress, String proximity, int txPower) {
+    public ScannerResultsBuilder(String deviceName, int rssi, String uuid, String macAddress, String proximity) {
         this.deviceName = deviceName;
         this.rssi = rssi;
         this.uuid = uuid;
         this.macAddress = macAddress;
         this.proximity = proximity;
-        this.txPower = txPower;
     }
 
     // Getters
@@ -38,10 +36,6 @@ public class ScannerResultsBuilder {
 
     public String getProximity() {
         return proximity;
-    }
-
-    public int getPower() {
-        return txPower;
     }
 
     // Setters to update values in real-time
