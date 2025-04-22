@@ -13,7 +13,7 @@
 
     <fragment
             android:id="@+id/advertiser"
-            android:name="App.Interfaces.Advertiser.AdvertiserFragment"
+            android:name="App.Interfaces.Advertiser.SinkFragment"
             android:label="@string/advertiser"
             tools:layout="@layout/advertiser_fragment"/>
 </navigation>
