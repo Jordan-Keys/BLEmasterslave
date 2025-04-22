@@ -1,156 +1,176 @@
-//package eazyble.MasterSlave.Advertiser;
-//
-//import android.Manifest;
-//import android.app.Activity;
-//import android.bluetooth.BluetoothAdapter;
-//import android.bluetooth.BluetoothManager;
-//import android.bluetooth.le.AdvertiseCallback;
-//import android.bluetooth.le.AdvertiseData;
-//import android.bluetooth.le.AdvertiseSettings;
-//import android.bluetooth.le.BluetoothLeAdvertiser;
-//import android.content.Context;
-//import android.content.pm.PackageManager;
-//import android.os.Build;
-//import android.os.Handler;
-//import android.os.Looper;
-//import android.os.ParcelUuid;
-//import android.widget.Toast;
-//import androidx.annotation.RequiresApi;
-//import androidx.core.app.ActivityCompat;
-//import androidx.core.content.ContextCompat;
-//import eazyble.Permissions;
-//
-//
-//// Advertising class
-//public class Advertising {
-//    private BluetoothLeAdvertiser bluetoothLeAdvertiser;
-//    private final BluetoothAdapter bluetoothAdapter;
-//    public static final long REQUEST_BLUETOOTH_ADVERTISE_PERMISSION = 1;
-//    private boolean advertising;
-//    private final Handler handler = new Handler(Looper.getMainLooper());
-//    private final Context context;
-//
-//    public Advertising(Context context) {
-//        this.context = context;
-//        BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-//        this.bluetoothAdapter = bluetoothManager.getAdapter();
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            checkAdvertisePermission();
-//        } else {
-//            bluetoothLeAdvertiser = this.bluetoothAdapter.getBluetoothLeAdvertiser();
-//        }
-//    }
-//
-//    @RequiresApi(api = Build.VERSION_CODES.S)
-//    private void checkAdvertisePermission() {
-//        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions((Activity) context,
-//                    new String[]{Manifest.permission.BLUETOOTH_ADVERTISE},
-//                    (int) REQUEST_BLUETOOTH_ADVERTISE_PERMISSION);
-//        } //else {
-//        //Toast.makeText(context, "Advertising permission already granted", Toast.LENGTH_SHORT).show();
-//        // bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
-//        // }
-//    }
-//
-//    public void startAdvertising(boolean useCustomSettings, String uuid, boolean includeDeviceName) {
-//        Permissions.checkBluetoothSupport((Activity) context);
-//        if (!advertising) {
-//            long ADVERTISE_PERIOD = 100000;
-//            handler.postDelayed(() -> {
-//                advertising = false;
-//                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                        checkAdvertisePermission();
-//                    }
-//                }
-//                if (bluetoothLeAdvertiser != null) {
-//                    bluetoothLeAdvertiser.stopAdvertising(advertiseCallback);
-//                    Toast.makeText(context, "Advertising stopped due to timeout", Toast.LENGTH_SHORT).show();
-//                }
-//            }, ADVERTISE_PERIOD);
-//
-//            AdvertiseSettings settings;
-//            AdvertiseData data;
-//
-//            if (useCustomSettings) {
-//                settings = new AdvertiseSettings.Builder()
-//                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-//                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH) // Set TxPower level
-//                        .setConnectable(false)
-//                        .build();
-//
-//                AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
-//                if (includeDeviceName) {
-//                    String deviceName = bluetoothAdapter.getName();
-//                    if (deviceName != null && deviceName.length() > 10) {
-//                        deviceName = deviceName.substring(0, 5); // Truncate if longer than 10 characters
-//                    }
-//                    dataBuilder.setIncludeDeviceName(true);
-//                }
-//                if (uuid != null && !uuid.isEmpty()) {
-//                    dataBuilder.addServiceUuid(ParcelUuid.fromString(uuid));
-//                } else {
-//                    dataBuilder.addServiceUuid(ParcelUuid.fromString("0000110E-0000-1000-8000-00805F9B34FB"));
-//                }
-//                data = dataBuilder.build();
-//            } else {
-//                settings = new AdvertiseSettings.Builder()
-//                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-//                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH ) // Set TxPower level
-//                        .setConnectable(false)
-//                        .build();
-//
-//                data = new AdvertiseData.Builder()
-//                        .setIncludeDeviceName(true)
-//                        .setIncludeTxPowerLevel(true) // Include TxPower level in advertisement data
-//                        .addServiceUuid(ParcelUuid.fromString("0000110E-0000-1000-8000-00805F9B34FB"))
-//                        .build();
-//            }
-//
-//            bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
-//            advertising = true;
-//            if (bluetoothLeAdvertiser != null) {
-//                bluetoothLeAdvertiser.startAdvertising(settings, data, advertiseCallback);
-//            } else {
-//                Toast.makeText(context, "Bluetooth is turned off", Toast.LENGTH_SHORT).show();
-//            }
-//        } else {
-//            advertising = false;
-//            if (bluetoothLeAdvertiser != null) {
-//                bluetoothLeAdvertiser.stopAdvertising(advertiseCallback);
-//                Toast.makeText(context, "Advertising is already in Progress", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-//
-//    private final AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
-//        @Override
-//        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-//            super.onStartSuccess(settingsInEffect);
-//            Toast.makeText(context, "Advertising started", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        @Override
-//        public void onStartFailure(int errorCode) {
-//            super.onStartFailure(errorCode);
-//            Toast.makeText(context, "Advertising failed with error code: " + errorCode, Toast.LENGTH_SHORT).show();
-//        }
-//    };
-//
-//    public void stopAdvertising() {
-//        if (advertising) {
-//            advertising = false;
-//            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//                    checkAdvertisePermission();
-//                }
-//            }
-//            bluetoothLeAdvertiser.stopAdvertising(advertiseCallback);
-//            Toast.makeText(context, "Advertising manually stopped", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(context, "Advertising is not active", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-//}
+package eazyble.MasterSlave.Advertiser;
+
+import android.Manifest;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.AdvertiseData;
+import android.bluetooth.le.AdvertisingSet;
+import android.bluetooth.le.AdvertisingSetCallback;
+import android.bluetooth.le.AdvertisingSetParameters;
+import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import eazyble.MasterSlave.Scanner.ResultsProcessor;
+import eazyble.Permissions;
+import java.nio.charset.StandardCharsets;
+
+public class Advertising {
+    private BluetoothLeAdvertiser bluetoothLeAdvertiser;
+    private final BluetoothAdapter bluetoothAdapter;
+    public static final long REQUEST_BLUETOOTH_ADVERTISE_PERMISSION = 1;
+    private boolean advertising;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Context context;
+    private AdvertisingSetCallback advertisingSetCallback;
+    private static final long SCAN_PERIOD = 30000;
+
+    public Advertising(Context context) {
+        this.context = context;
+        BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        this.bluetoothAdapter = bluetoothManager.getAdapter();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            checkAdvertisePermission();
+        } else {
+            bluetoothLeAdvertiser = this.bluetoothAdapter.getBluetoothLeAdvertiser();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void checkAdvertisePermission() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context,
+                    new String[]{Manifest.permission.BLUETOOTH_ADVERTISE},
+                    (int) REQUEST_BLUETOOTH_ADVERTISE_PERMISSION);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void startAdvertising() {
+        Permissions.checkBluetoothSupport((Activity) context);
+
+        if (!advertising) {
+            // Get the latest scanned data with debug logging
+            ResultsProcessor processor = ResultsProcessor.getInstance();
+            String scannedData = processor.getLatestDeviceData();
+
+            if (!scannedData.isEmpty()) {
+                Log.d("Advertising", "Ready Data: " + scannedData);
+            } else {
+                Log.w("Advertising", "No scanned data available, sink own node information.");
+            }
+
+            // time out
+            Runnable timeoutRunnable = () -> {
+                if (advertising) {
+                    advertising = false;
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            checkAdvertisePermission();
+                        }
+                    }
+                    if (bluetoothLeAdvertiser != null) {
+                        // Stop advertising only if it was still active
+                        bluetoothLeAdvertiser.stopAdvertisingSet(advertisingSetCallback);
+                        Toast.makeText(context, "Advertising stopped due to timeout", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            };
+                handler.postDelayed(timeoutRunnable, SCAN_PERIOD);
+
+            // Check for extended sink support
+            if (!bluetoothAdapter.isLeExtendedAdvertisingSupported()) {
+                Toast.makeText(context, "Extended advertising not supported", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            bluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
+            if (bluetoothLeAdvertiser == null) {
+                Toast.makeText(context, "Bluetooth is turned off", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Extended sink parameters
+            AdvertisingSetParameters parameters = new AdvertisingSetParameters.Builder()
+                    .setLegacyMode(false)
+                    .setInterval(AdvertisingSetParameters.INTERVAL_LOW)
+                    .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_HIGH)
+                    .setPrimaryPhy(BluetoothDevice.PHY_LE_1M)
+                    .setSecondaryPhy(BluetoothDevice.PHY_LE_2M)
+                    .setConnectable(false)
+                    .build();
+
+            int manufacturerId = 1234;
+            AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder()
+                    .setIncludeDeviceName(true)
+                    .setIncludeTxPowerLevel(false);
+
+            if (!scannedData.isEmpty()) {
+                byte[] stringBytes = scannedData.getBytes(StandardCharsets.UTF_8);
+                dataBuilder.addManufacturerData(manufacturerId, stringBytes);
+            }
+
+            AdvertiseData data = dataBuilder.build();
+
+            advertisingSetCallback = new AdvertisingSetCallback() {
+                @Override
+                public void onAdvertisingSetStarted(AdvertisingSet advertisingSet, int txPower, int status) {
+                    super.onAdvertisingSetStarted(advertisingSet, txPower, status);
+                    if (status == AdvertisingSetCallback.ADVERTISE_SUCCESS) {
+                        Toast.makeText(context, "Advertising started", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Advertising failed: " + status, Toast.LENGTH_SHORT).show();
+                        advertising = false;
+                    }
+                }
+
+                @Override
+                public void onAdvertisingSetStopped(AdvertisingSet advertisingSet) {
+                    super.onAdvertisingSetStopped(advertisingSet);
+                    advertising = false;
+                }
+            };
+
+            advertising = true;
+            bluetoothLeAdvertiser.startAdvertisingSet(
+                    parameters,
+                    data,
+                    null, // scan response
+                    null, // periodic parameters
+                    null, // periodic data
+                    advertisingSetCallback
+            );
+        } else {
+            Toast.makeText(context, "Advertising is already in progress", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void stopAdvertising() {
+        if (advertising) {
+            advertising = false;
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    checkAdvertisePermission();
+                }
+            }
+            if (bluetoothLeAdvertiser != null && advertisingSetCallback != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    bluetoothLeAdvertiser.stopAdvertisingSet(advertisingSetCallback);
+                }
+                Toast.makeText(context, "Advertising manually stopped", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "Advertising is not active", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
